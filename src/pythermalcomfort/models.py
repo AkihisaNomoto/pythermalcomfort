@@ -3307,16 +3307,16 @@ class JOS3:
     such as body height, weight, age, sex, etc.
 
     Environmental conditions such as air temperature, mean radiant temperature, air velocity, etc.
-    can be set using the setter methods. (ex. X.tdb, X.tr X.v)
-    If you want to set the different conditons in each body part, set them
-    as a 17 lengths of list, dictionaly, or numpy array format.
+    can be set using setter methods. (ex. X.tdb, X.tr X.v)
+    If you want to set the different conditions in each body part, set them
+    as a 17 lengths of list, dictionary, or numpy array format.
 
     List or numpy array format input must be 17 lengths and means the order of "head", "neck", "chest",
     "back", "pelvis", "left_shoulder", "left_arm", "left_hand", "right_shoulder", "right_arm",
     "right_hand", "left_thigh", "left_leg", "left_foot", "right_thigh", "right_leg" and "right_foot".
 
     The model output includes local and mean skin temperature, local core temperature,
-    local and mean skin wettedness, and heat loss from the skin etc. which can be accessed using getter methods.
+    local and mean skin wettedness, and heat loss from the skin etc. which also can be accessed using getter methods.
     (ex. X.t_skin, X.t_skin_mean, X.t_core)
 
     If you use this package, please cite us as follows and mention the version of pythermalcomfort used:
@@ -3351,16 +3351,16 @@ class JOS3:
         Parameters
         ----------
         tdb : float or array-like
-            dry bulb air temperature [°C].
-        tr : float or list-like
+            Dry bulb air temperature [°C].
+        tr : float or array-like
             Mean radiant temperature [°C].
-        to : float or list-like
+        to : float or array-like
             Operative temperature [°C].
-        v : float or list-like
+        v : float or array-like
             Air speed [m/s].
-        rh : float or list-like
+        rh : float or array-like
             Relative humidity [%].
-        clo : float or list-like
+        clo : float or array-like
             Clothing insulation [clo].
             Note: If you want to input clothing insulation to each body part,
             it can be input using the dictionary in utilities.py.
@@ -3429,6 +3429,7 @@ class JOS3:
         weight_loss_by_evap_and_res: weight loss by the evaporation and respiration of the whole body [g/sec]
         OPTIONAL PARAMETERS : the paramters listed below are returned if ex_output = "all"
         Q_bmr_core: core heat production by basal metabolism (each body part) [W]
+        Q_bmr_fat: fat heat production by basal metabolism (each body part) [W]
         Q_bmr_muscle: muscle heat production by basal metabolism (each body part) [W]
         Q_bmr_skin: skin heat production by basal metabolism (each body part) [W]
         Q_core  : core total heat production (each body part) [W]
@@ -3438,8 +3439,8 @@ class JOS3:
         Q_shiv  : core or muscle heat production by shivering thermogenesis (each body part) [W]
         Q_skin  : skin total heat production (each body part) [W]
         Q_work  : core or muscle heat production by work (each body part) [W]
-        Ret     : total clothing evaporative heat resistance (each body part) [m2.kPa/W]
-        Rt      : total clothing heat resistance (each body part) [m2.K/W]
+        Ret     : total clothing evaporative heat resistance (each body part) [(m2*kPa)/W]
+        Rt      : total clothing heat resistance (each body part) [(m2*K)/W]
         age     : age [years]
         bf_ava_foot: AVA blood flow rate of one foot [L/h]
         bf_ava_hand: AVA blood flow rate of one hand [L/h]
@@ -3454,7 +3455,6 @@ class JOS3:
         e_sweat : evaporative heat loss from the skin by only sweating (each body part) [W]
         fat     : body fat rate [%]
         height  : body height [m]
-        met_base_fat: fat heat production by basal metabolism (each body part) [W]
         name    : name of the model [-]
         par     : physical activity ratio [-]
         q_res_latent: latent heat loss by respiration (each body part) [W]
@@ -3465,10 +3465,10 @@ class JOS3:
         sex     : sex [-]
         t_artery: arterial temperature (each body part) [°C]
         t_cb    : central blood temperature [°C]
-        t_core_set: skin set point temperature (each body part) [°C]
+        t_core_set: core set point temperature (each body part) [°C]
         t_fat   : fat temperature (each body part) [°C]
         t_muscle: muscle temperature (each body part) [°C]
-        t_skin_set: core set point temperature (each body part) [°C]
+        t_skin_set: skin set point temperature (each body part) [°C]
         t_superficial_vein: superficial vein temperature (each body part) [°C]
         t_vein  : vein temperature (each body part) [°C]
         tdb     : dry bulb air temperature (each body part) [°C]
@@ -4153,7 +4153,7 @@ class JOS3:
             detail_out["bf_ava_foot"] = bf_ava_foot
             detail_out["Q_bmr_core"] = m_base[0]
             detail_out["Q_bmr_muscle"] = m_base[1][VINDEX["muscle"]]
-            detail_out["met_base_fat"] = m_base[2][VINDEX["fat"]]
+            detail_out["Q_bmr_fat"] = m_base[2][VINDEX["fat"]]
             detail_out["Q_bmr_skin"] = m_base[3]
             detail_out["Q_work"] = q_work
             detail_out["Q_shiv"] = q_shiv
